@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  redis_queue_len_service:
+    build: .
+    ports:
+      - 8000:8000
+    networks:
+      - my_network
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - RUST_LOG=info
+  redis:
+    image: redis:alpine
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge

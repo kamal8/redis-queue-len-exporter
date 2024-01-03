@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  redis_queue_len_service:
+    image: kamal8/redis-queue-len-exporter:latest
+    networks:
+      - app_network
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - RUST_LOG=info
+      - QUEUES=queue1,queue2
+  redis:
+    image: redis:alpine
+    networks:
+      - app_network
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - my_network
+
+networks:
+  app_network:
+    driver: bridge
